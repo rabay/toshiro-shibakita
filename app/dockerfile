@@ -1,0 +1,13 @@
+FROM php:8.2-apache
+
+# Ativar extensões necessárias do PHP
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+
+# Habilitar mod_rewrite do Apache
+RUN a2enmod rewrite
+
+# Copiar o código da aplicação
+COPY src/ /var/www/html/
+
+# Ajustar permissões
+RUN chown -R www-data:www-data /var/www/html/

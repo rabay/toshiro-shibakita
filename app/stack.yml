@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+    deploy:
+      mode: replicated
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    ports:
+      - "8081:80"
+    networks:
+      - app_network
+    secrets:
+      - source: mysql_password
+        target: mysql_password
+        mode: 0400
+
+networks:
+  app_network:
+    driver: overlay
+  mysql_network:
+    external: true
+
+secrets:
+  mysql_password:
+    external: true
